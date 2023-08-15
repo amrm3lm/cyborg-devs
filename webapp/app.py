@@ -36,7 +36,7 @@ with st.form("my_form"):
        st.write("submitted")
        svm_res = svm_model().predict(inp)
        lr_res = lr_model().predict(inp)
-      #  bert_res = bert_model().predict(inp)
+       bert_res = bert_model().predict(inp)
       #  dt_res = dt_model().predict(inp)
 
        
