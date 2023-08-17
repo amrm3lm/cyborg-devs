@@ -18,7 +18,6 @@ pysocks
 python-bidi
 ruqia
 scikit-learn
-sklearn
 streamlit
 tensorflow
 transformers
