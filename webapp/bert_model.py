@@ -21,7 +21,8 @@ class BERTModel():
 
         self.prep_model_name = 'aubmindlab/bert-base-arabertv2'
 
-        self.arabert_prep = ArabertPreprocessor(model_name=self.prep_model_name)
+        self.arabert_prep = ArabertPreprocessor(
+            model_name=self.prep_model_name,   apply_farasa_segmentation=False)
         self.directory = 'model5bert/arabertv5_0'
         self.model_loaded = False
         
