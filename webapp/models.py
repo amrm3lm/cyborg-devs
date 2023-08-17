@@ -2,6 +2,7 @@ from arabert.preprocess import ArabertPreprocessor
 import joblib
 import re
 import nltk
+nltk.download('punkt')
 import scipy.sparse as sp
 from ruqiya import ruqiya
 
