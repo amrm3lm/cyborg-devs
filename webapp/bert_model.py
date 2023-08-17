@@ -6,6 +6,7 @@ import gdown
 import os
 import zipfile
 from arabert.preprocess import ArabertPreprocessor
+from ruqiya import ruqiya
 
 # Load the saved model
 
@@ -21,14 +22,15 @@ class BERTModel():
 
         self.prep_model_name = 'aubmindlab/bert-base-arabertv2'
 
-        self.arabert_prep = ArabertPreprocessor(
-            model_name=self.prep_model_name,   apply_farasa_segmentation=False)
+        # self.arabert_prep = ArabertPreprocessor(
+        #     model_name=self.prep_model_name,   apply_farasa_segmentation=False)
         self.directory = 'model5bert/arabertv5_0'
         self.model_loaded = False
+        self.unzipped_model = "unzippedbert"
         
         self.load_gd()
         self.model = keras.models.load_model(
-            "model5bert/arabertv5_0/", custom_objects={"TFBertModel": TFBertModel})
+            f"{self.unzipped_model}/arabertv5_0/", custom_objects={"TFBertModel": TFBertModel})
 
 
     def load_gd(self):
@@ -36,12 +38,16 @@ class BERTModel():
         f_checkpoint = "model5bert"
         gd_link = "https://drive.google.com/file/d/1XmNE4Vl4kxFA_C9fjL5IB7QCzDg_xNhL/view?usp=sharing"
 
-
         if not os.path.exists(f_checkpoint):
             print("downloading model")
-            res = gdown.download(gd_link, f_checkpoint, quiet=True,
-                                fuzzy=True, use_cookies=False)
-            unzip_file("bertmodel5.zip", "model5bert")
+            try:
+                
+                res = gdown.download(gd_link, f_checkpoint, quiet=True,
+                                    fuzzy=True, use_cookies=False)
+            except:
+                print("exception while downloading model ")
+                
+            unzip_file("model5bert", self.unzipped_model)
         else:
             print("model already downloaded")
         self.model_loaded = True
@@ -55,7 +61,8 @@ class BERTModel():
         return res
 
     def preprocess(self, txt):
-        txt_res = self.arabert_prep.preprocess(txt)
+        #txt_res = self.arabert_prep.preprocess(txt)
+        txt_res = ruqiya.clean_text(txt)
         tokens = self.tokenizer(txt_res, padding='max_length',
                         truncation=True, return_tensors='tf', max_length=self.max_length_tokens).input_ids
         x = tf.convert_to_tensor(tokens)

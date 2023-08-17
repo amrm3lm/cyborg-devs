@@ -3,6 +3,7 @@ import joblib
 import re
 import nltk
 import scipy.sparse as sp
+from ruqiya import ruqiya
 
 emoj = re.compile("["
                   u"\U00002700-\U000027BF"  # Dingbats
@@ -21,15 +22,15 @@ emoj = re.compile("["
                   "]+", re.UNICODE)
 
 bert_model_name = 'aubmindlab/bert-base-arabertv2'
-arabert_prep = ArabertPreprocessor(
-    model_name=bert_model_name, apply_farasa_segmentation=False)
-tfidfVectorizer = joblib.load('tfidf_vectorizer.pkl')
-scaler = joblib.load('scaler.pkl')
+# arabert_prep = ArabertPreprocessor(
+#     model_name=bert_model_name, apply_farasa_segmentation=False)
+tfidfVectorizer = joblib.load('webapp/tfidf_vectorizer.pkl')
+scaler = joblib.load('webapp/scaler.pkl')
 INPUT_LENTH = 19095
 
 class SVMModel():
     def __init__(self) -> None:
-        self.model = joblib.load('SVmModel.pkl')
+        self.model = joblib.load('webapp/SVmModel.pkl')
         
     def predict(self, txt):
         X_combined = prepare_input(txt)
@@ -40,7 +41,7 @@ class SVMModel():
 
 class LRModel():
     def __init__(self) -> None:
-        self.model = joblib.load('lrModel.pkl')
+        self.model = joblib.load('webapp/lrModel.pkl')
 
     def predict(self, txt):
         X_combined = prepare_input(txt)
@@ -78,7 +79,7 @@ def preprocess_txt(txt):
     features = feature_extract(txt)
     
     # cleaning
-    txt = arabert_prep.preprocess(txt)
+    txt = ruqiya.clean_text(txt)
     txt = remove_english_letters(txt)
     
     #tokeniz

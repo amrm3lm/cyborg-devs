@@ -27,7 +27,7 @@ def bert_model():
 # def dt_model():
 #    return DTModel()
 
-   
+bert_model()
 
 with st.form("my_form"):
    inp = st.text_area(label="Write a tweet and it will be classified!")
@@ -43,7 +43,7 @@ with st.form("my_form"):
 
        
        
-col1, col2, col3= st.columns(4)
+col1, col2, col3= st.columns(3)  
 
 with col1:
    st.header("Linear Regression")
