@@ -4,7 +4,8 @@ from tensorflow import keras
 import tensorflow as tf
 import gdown
 import os
-from time import sleep
+import zipfile
+from arabert.preprocess import ArabertPreprocessor
 
 # Load the saved model
 
@@ -16,9 +17,10 @@ class BERTModel():
         self.max_length_tokens = 64
         self.bert_model_name = 'aubmindlab/bert-base-arabertv02-twitter'
         self.tokenizer = BertTokenizer.from_pretrained(
-        self.bert_model_name, max_length=self.max_length_tokens, model_max_length=mself.ax_length_tokens)
+        self.bert_model_name, max_length=self.max_length_tokens, model_max_length=self.max_length_tokens)
 
         self.prep_model_name = 'aubmindlab/bert-base-arabertv2'
+
         self.arabert_prep = ArabertPreprocessor(model_name=self.prep_model_name)
         self.directory = 'model5bert/arabertv5_0'
         self.model_loaded = False
@@ -30,12 +32,11 @@ class BERTModel():
 
     def load_gd(self):
 
-        f_checkpoint = "bertmodel5.zip"
+        f_checkpoint = "model5bert"
         gd_link = "https://drive.google.com/file/d/1XmNE4Vl4kxFA_C9fjL5IB7QCzDg_xNhL/view?usp=sharing"
 
 
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        if not os.path.exists(f_checkpoint):
             print("downloading model")
             res = gdown.download(gd_link, f_checkpoint, quiet=True,
                                 fuzzy=True, use_cookies=False)
@@ -49,7 +50,7 @@ class BERTModel():
         if self.model_loaded is False:
             return {'status':'model not loaded yet'}
         x = self.preprocess(txt)
-        res = self.model.bert.predict(x)
+        res = self.model.predict(x)
         return res
 
     def preprocess(self, txt):

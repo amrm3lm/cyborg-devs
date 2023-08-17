@@ -22,8 +22,8 @@ emoj = re.compile("["
 
 bert_model_name = 'aubmindlab/bert-base-arabertv2'
 arabert_prep = ArabertPreprocessor(model_name=bert_model_name)
-tfidfVectorizer = joblib.load('../word_to_tfidf.pkl')
-scaler = joblib.load('../Full/scaler.pkl')
+tfidfVectorizer = joblib.load('../tfidf_vectorizer.pkl')
+scaler = joblib.load('../scaler.pkl')
 INPUT_LENTH = 19095
 
 class SVMModel():
@@ -33,6 +33,7 @@ class SVMModel():
     def predict(self, txt):
         X_combined = prepare_input(txt)
         res = self.model.predict(X_combined)
+        print("RES-------------------------", res)
         return res
 
 
@@ -43,6 +44,7 @@ class LRModel():
     def predict(self, txt):
         X_combined = prepare_input(txt)
         res = self.model.predict(X_combined)
+        print("RES-------------------------",res)
         return res
     
 # todo : make the same scikit version
@@ -60,13 +62,12 @@ class LRModel():
         
 def prepare_input(txt):
     features = preprocess_txt(txt)
-    idfed = [tfidfVectorizer[w] if w in tfidfVectorizer else 0 for w in features['puretext'].split()]
+    idfed = tfidfVectorizer.transform([features['puretext']])
 
     other_features = [[features['num_hashtags'],
                        features['num_mentions'], features['num_words'], features['num_emojis'], features['num_links'], features['num_emojis'], 0]]
     tformed = scaler.transform(other_features)
-    padding_to_add = INPUT_LENTH - (len(idfed) + tformed.shape[1])
-    X_combined = sp.hstack((idfed, tformed, [0 for x in range(padding_to_add)]), format='csr')
+    X_combined = sp.hstack((idfed, tformed), format='csr')
     return X_combined
 
         

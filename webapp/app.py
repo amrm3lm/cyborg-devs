@@ -1,5 +1,6 @@
 from models import SVMModel, LRModel
 from bert_model import BERTModel
+import os
 
 import streamlit as st
 st.title('Arabic Tweet Spam Classification')
@@ -15,8 +16,9 @@ def lr_model():
    return LRModel()
 
 
-@st.cache_data
+@st.cache_resource
 def bert_model():
+   os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
    return BERTModel()
 
 
@@ -28,7 +30,7 @@ def bert_model():
    
 
 with st.form("my_form"):
-   inp = st.text_input(label="Write a tweet and it will be classified!")
+   inp = st.text_area(label="Write a tweet and it will be classified!")
    
    # Every form must have a submit button.
    submitted = st.form_submit_button("Submit")
@@ -60,13 +62,6 @@ with col2:
       pass
 
 with col3:
-   st.header("Decision Tree")
-   try:
-      st.write(dt_res)
-   except NameError:
-      pass
-
-with col4:
    st.header("Bert")
    try:
       st.write(bert_res)
