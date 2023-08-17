@@ -21,7 +21,8 @@ emoj = re.compile("["
                   "]+", re.UNICODE)
 
 bert_model_name = 'aubmindlab/bert-base-arabertv2'
-arabert_prep = ArabertPreprocessor(model_name=bert_model_name)
+arabert_prep = ArabertPreprocessor(
+    model_name=bert_model_name, apply_farasa_segmentation=False)
 tfidfVectorizer = joblib.load('tfidf_vectorizer.pkl')
 scaler = joblib.load('scaler.pkl')
 INPUT_LENTH = 19095
