@@ -22,13 +22,13 @@ emoj = re.compile("["
 
 bert_model_name = 'aubmindlab/bert-base-arabertv2'
 arabert_prep = ArabertPreprocessor(model_name=bert_model_name)
-tfidfVectorizer = joblib.load('../tfidf_vectorizer.pkl')
-scaler = joblib.load('../scaler.pkl')
+tfidfVectorizer = joblib.load('tfidf_vectorizer.pkl')
+scaler = joblib.load('scaler.pkl')
 INPUT_LENTH = 19095
 
 class SVMModel():
     def __init__(self) -> None:
-        self.model = joblib.load('../SVmModel.pkl')
+        self.model = joblib.load('SVmModel.pkl')
         
     def predict(self, txt):
         X_combined = prepare_input(txt)
@@ -39,7 +39,7 @@ class SVMModel():
 
 class LRModel():
     def __init__(self) -> None:
-        self.model = joblib.load('../lrModel.pkl')
+        self.model = joblib.load('lrModel.pkl')
 
     def predict(self, txt):
         X_combined = prepare_input(txt)
